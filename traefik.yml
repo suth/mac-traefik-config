@@ -1,0 +1,29 @@
+## traefik.yml
+log:
+  level: DEBUG
+
+## Static configuration
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entrypoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+
+# Docker configuration backend
+providers:
+  docker:
+    # network: "web"
+    exposedByDefault: false
+    watch: true
+  file:
+    filename: /etc/traefik/dynamic_conf.yml
+    watch: true
+
+# API and dashboard configuration
+api:
+  insecure: true

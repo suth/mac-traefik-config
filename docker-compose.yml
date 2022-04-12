@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+  traefik:
+    image: traefik:v2.3
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # The Web UI (enabled by --api)
+    net: "host"
+    networks:
+      - web
+    volumes:
+      - ./certs:/etc/traefik/certs:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./dynamic_conf.yml:/etc/traefik/dynamic_conf.yml
+      - /var/run/docker.sock:/var/run/docker.sock
