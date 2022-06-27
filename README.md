@@ -31,7 +31,7 @@ We will be using Dnsmasq to make sure all domains using the `.test` TLD are poin
 1. Restart dnsmasq using `sudo brew services restart dnsmasq`
 1. Confirm everything works so far by running `dig foobar.test @127.0.0.1 +short`. The output should match the alias we created.
 1. Now we need to add a resolver. Create a directory using `sudo mkdir /etc/resolver` that will contain our resolver. Then create a file named `test` (the name corresponds to our `.test` TLD) with the contents `nameserver 127.0.0.1`
-1. Confirm everything is set up using `ping foobar.test`
+1. Confirm everything is set up using `ping -c 1 foobar.test`
 
 ## Traefik Configuration
 
