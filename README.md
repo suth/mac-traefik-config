@@ -2,6 +2,8 @@
 
 This is a rundown of how my local web development environment on macOS uses Traefik as a reverse proxy to route traffic to Docker containers over HTTPS. I created this for my own reference since I am not an expert, but hopefully it can help someone else and maybe find some suggested improvements.
 
+Note: This guide was originally created using an Intel Mac, but some changes and additions were made after switching to Apple silicon. Exact file paths or steps may very between platforms.
+
 * [Features](#features)
 * [Dnsmasq Configuration](#dnsmasq-configuration)
 * [Traefik Configuration](#traefik-configuration)
