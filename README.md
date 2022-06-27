@@ -21,10 +21,15 @@ This is a rundown of how my local web development environment on macOS uses Trae
 
 We will be using Dnsmasq to make sure all domains using the `.test` TLD are pointed at our local machine and Traefik can handle the requests. We could use `127.0.0.1` as our target and everything will work fine on our host, but when we try to resolve a `.test` domain from inside a container `127.0.0.1` will refer to the current container. To solve this we can create a loopback interface and use that IP.
 
-
-1. Install Dnsmasq on the host machine.
-1. Configure Dnsmasq to point all domains using our `.test` TLD to `10.254.254.254`
+1. Install Dnsmasq using `brew install dnsmasq` on the host machine.
+1. Start the service using `sudo brew services start dnsmasq`
+1. Open the config file at `/opt/homebrew/etc/dnsmasq.conf` and uncomment the line `#conf-dir=/opt/homebrew/etc/dnsmasq.d/,*.conf` near the end of the file.
+1. Next we will configure Dnsmasq to point all domains using our `.test` TLD to `10.254.254.254`. To do this create a file at `/opt/homebrew/etc/dnsmasq.d/development.conf` with the contents `address=/.test/10.254.254.254`
 1. Run `sudo ifconfig lo0 alias 10.254.254.254` to create an IP address alias (note: this will not persist across a reboot, so [here is a potential solution](https://web.archive.org/web/20200805154725/https://blog.felipe-alfaro.com/2017/03/22/persistent-loopback-interfaces-in-mac-os-x/))
+1. Restart dnsmasq using `sudo brew services restart dnsmasq`
+1. Confirm everything works so far by running `dig foobar.test @127.0.0.1 +short`. The output should match the alias we created.
+1. Now we need to add a resolver. Create a directory using `sudo mkdir /etc/resolver` that will contain our resolver. Then create a file named `test` (the name corresponds to our `.test` TLD) with the contents `nameserver 127.0.0.1`
+1. Confirm everything is set up using `ping foobar.test`
 
 ## Traefik Configuration
 
